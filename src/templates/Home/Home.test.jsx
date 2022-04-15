@@ -46,11 +46,21 @@ describe('<Home/>', () => {
     server.close();
   });
 
-  it('should render search, posts ad load more', async () => {
+  it('should render search, posts and load more', async () => {
     render(<Home />);
     const noMorePosts = screen.getByText('Não existem posts');
 
+    expect.assertions(3);
+
     await waitForElementToBeRemoved(noMorePosts);
-    screen.debug();
+
+    const search = screen.getByPlaceholderText(/type your search/i);
+    expect(search).toBeInTheDocument();
+
+    const images = screen.getAllByRole('img', { name: /title/i });
+    expect(images).toHaveLength(2);
+
+    const button = screen.getByRole('button', { name: /load more posts/i });
+    expect(button).toBeInTheDocument();
   });
 });
